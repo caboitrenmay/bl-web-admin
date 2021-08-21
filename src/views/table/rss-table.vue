@@ -1,7 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.name" placeholder="Tên" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.source" class="filter-item" placeholder="Chọn nguồn">
+        <el-option v-for="item in sources" :key="item" :label="item === '' ? 'tất cả' : item" :value="item" />
+      </el-select>
+      <el-input v-model="listQuery.name" placeholder="Tiêu đề" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Search
       </el-button>
@@ -104,7 +107,7 @@
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination'
 import { MessageBox } from 'element-ui'
-import { fetchRssList, createRss, updateRss, deleteRss } from '@/api/rss'
+import { fetchRssList, createRss, updateRss, deleteRss, fetchSourceList } from '@/api/rss'
 // secondary package based on el-pagination
 
 export default {
@@ -114,6 +117,7 @@ export default {
   data() {
     return {
       tableKey: 0,
+      sources: [],
       list: null,
       total: 0,
       listLoading: true,
@@ -121,7 +125,7 @@ export default {
         page: 1,
         limit: 20,
         name: undefined,
-        sortBy: '+id'
+        sortBy: '-active'
       },
       // sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       temp: {
@@ -152,6 +156,14 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      fetchSourceList().then(sources => {
+        this.sources = ['', ...sources]
+      })
+      for (const [key, value] of Object.entries(this.listQuery)) {
+        if (value === '') {
+          this.listQuery[key] = undefined
+        }
+      }
       fetchRssList(this.listQuery).then(data => {
         this.list = data.results
         this.total = data.totalResults
@@ -185,8 +197,8 @@ export default {
         id: undefined,
         link: null,
         name: null,
-        source: null,
-        active: false,
+        source: this.listQuery.source,
+        active: true,
         editorChoice: false
       }
     },
@@ -207,7 +219,6 @@ export default {
 
             const res = await createRss(this.temp)
             this.temp.id = res.id
-            this.temp.index = this.list.length + 1
             this.list.push(this.temp)
             // this.list.unshift(this.temp)
             this.dialogFormVisible = false

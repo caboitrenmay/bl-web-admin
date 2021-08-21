@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function fetchSourceList() {
+  return request({
+    url: '/news/feed/source',
+    method: 'get'
+  })
+}
+
 export function fetchRssList(query) {
   return request({
     url: '/news/rss',
@@ -18,7 +25,7 @@ export function createRss(data) {
 
 export function updateRss(id, data) {
   return request({
-    url: `/news/${id}`,
+    url: `/news/rss/${id}`,
     method: 'patch',
     data
   })
@@ -26,7 +33,7 @@ export function updateRss(id, data) {
 
 export function deleteRss(id) {
   return request({
-    url: `/news/${id}`,
+    url: `/news/rss/${id}`,
     method: 'delete'
   })
 }
