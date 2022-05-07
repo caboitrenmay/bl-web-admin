@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchSourceList() {
   return request({
-    url: '/news/feed/source',
+    url: '/news/source',
     method: 'get'
   })
 }

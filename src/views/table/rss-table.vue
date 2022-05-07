@@ -28,9 +28,9 @@
           {{ row.active ? 'Yes' : 'No' }}
         </template>
       </el-table-column>
-      <el-table-column label="Link" align="center" min-width="240px">
+      <el-table-column label="Url" align="center" min-width="240px">
         <template slot-scope="{row}">
-          <el-link :href="row.link" target="_blank">{{ row.link }}</el-link>
+          <el-link :href="row.url" target="_blank">{{ row.url }}</el-link>
         </template>
       </el-table-column>
 
@@ -68,8 +68,8 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
 
-        <el-form-item label="Link" prop="link">
-          <el-input v-model="temp.link" placeholder="Link của rss" />
+        <el-form-item label="Url" prop="url">
+          <el-input v-model="temp.url" placeholder="Url của rss" />
         </el-form-item>
         <el-form-item label="Tiêu đề" prop="name">
           <el-input v-model="temp.name" />
@@ -130,7 +130,7 @@ export default {
       // sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       temp: {
         id: undefined,
-        link: null,
+        url: null,
         name: null,
         source: null,
         active: false,
@@ -146,7 +146,7 @@ export default {
       rules: {
         name: [{ required: true, message: 'name is required', trigger: 'change' }],
         source: [{ required: true, message: 'source is required', trigger: 'change' }],
-        link: [{ required: true, message: 'link is required', trigger: 'blur' }]
+        url: [{ required: true, message: 'url is required', trigger: 'blur' }]
       }
     }
   },
@@ -195,7 +195,7 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        link: null,
+        url: null,
         name: null,
         source: this.listQuery.source,
         active: true,
